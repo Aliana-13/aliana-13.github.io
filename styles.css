@@ -1,0 +1,690 @@
+Давайте создадим более привлекательную цветовую схему с использованием глубоких оттенков и интересных градиентов:
+
+```css
+/* Новые цветовые переменные */
+:root {
+    --primary-color: linear-gradient(135deg, #2c3e50, #455a64); /* Глубокий синий-серый */
+    --secondary-color: linear-gradient(135deg, #34495e, #607d8b); /* Тёмно-синий градиент */
+    --accent-color: linear-gradient(135deg, #bdc3c7, #95a5a6); /* Светло-серый градиент */
+    --text-color: #ffffff;
+    --container-width: 80%;
+    --gradient-overlay: rgba(0, 0, 0, 0.4);
+    --highlight-color: linear-gradient(135deg, #e74c3c, #f1c40f); /* Акцентный градиент */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    background: var(--primary-color);
+    overflow-x: hidden;
+}
+
+/* Header стили */
+.header-container {
+    background: var(--primary-color);
+    background-size: cover;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.header {
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    color: var(--text-color);
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.nav a {
+    color: var(--text-color);
+    margin-left: 30px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.nav a:hover {
+    color: var(--highlight-color);
+}
+
+/* Hero Section */
+.hero-container {
+    background: 
+        linear-gradient(to bottom, var(--gradient-overlay), var(--gradient-overlay)),
+        url('images/hero-bg.jpg') no-repeat center/cover;
+    background-blend-mode: multiply;
+    padding: 150px 0 100px;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+/* Кнопки с новым дизайном */
+.btn {
+    background: var(--highlight-color);
+    color: var(--text-color);
+    padding: 15px 30px;
+    border-radius: 50px;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #f1c40f, #e74c3c);
+    color: var(--text-color);
+}
+
+/* Рецепты с улучшенным дизайном */
+.recipe-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    background: var(--secondary-color);
+}
+
+.recipe-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, var(--gradient-overlay));
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.recipe-card:hover::before {
+    opacity: 0.5;
+}
+
+/* Contact Section */
+Давайте завершим стили для нашего кулинарного сайта с обновленной цветовой схемой.
+
+```css
+/* Продолжение стилей для формы контактов */
+.contact-form input,
+.contact-form textarea {
+ background: var(--secondary-color);
+ color: var(--text-color);
+ border: 1px solid var(--accent-color);
+ padding: 15px;
+ margin-bottom: 20px;
+ border-radius: 8px;
+ font-size: 16px;
+}
+
+.contact-form button {
+ background: var(--highlight-color);
+ color: var(--text-color);
+ border: none;
+ border-radius: 8px;
+ cursor: pointer;
+ padding: 15px 30px;
+ transition: background 0.3s;
+}
+
+.contact-form button:hover {
+ background: linear-gradient(135deg, #f1c40f, #e74c3c);
+}
+
+/* About Section */
+.about-container {
+ padding: 80px 0;
+ background: var(--secondary-color);
+}
+
+.about-content {
+ text-align: center;
+ color: var(--text-color);
+}
+
+/* Footer стили */
+.footer-container {
+ padding: 40px 0;
+ background: var(--primary-color);
+}
+
+.footer {
+ text-align: center;
+ color: var(--accent-color);
+}
+
+/* Анимации с новыми эффектами */
+.animate-gradient {
+ animation: gradientChange 5s ease-in-out infinite;
+}
+
+@keyframes gradientChange {
+ 0% {
+ filter: hue-rotate(0deg);
+ }
+ 50% {
+ filter: hue-rotate(180deg);
+ }
+ 100% {
+ filter: hue-rotate(360deg);
+ }
+}
+
+/* Улучшенные эффекты наведения */
+.recipe-card:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+ transition: all 0.3s;
+}
+
+.recipe-card:hover .recipe-info {
+ background: linear-gradient(135deg, #bdc3c7, #95a5a6);
+ color: var(--text-color);
+}
+
+/* Оптимизация для мобильных устройств */
+@media (max-width: 768px) {
+ .header {
+ padding: 15px 0;
+ }
+ 
+ .nav ul {
+ flex-direction: column;
+ }
+ 
+ .nav a {
+ margin: 10px 0;
+ }
+ 
+ .hero-container {
+ padding: 80px 0 50px;
+ }
+ 
+ .recipe-grid {
+ grid-template-columns: 1fr;
+ }
+}
+
+@media (max-width: 480px) {
+ .btn {
+ padding: 12px 20px;
+ }
+ 
+ .contact-form {
+ padding: 0 15px;
+ }
+}
+
+/* Дополнительные улучшения */
+.section-title {
+ text-align: center;
+ margin-bottom: 40px;
+}
+
+.section-title h2 {
+ font-size: 32px;
+ color: var(--text-color);
+ text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Стили для списка рецептов */
+.recipe-list {
+ margin-top: 30px;
+}
+
+.recipe-list li {
+ padding: 15px;
+ background: rgba(255,255,255,0.1);
+ margin-bottom: 10px;
+ border-radius: 5px;
+}
+
+.recipe-list li:hover {
+ background: rgba(255,255,255,0.2);
+ transform: translateY(-2px);
+ box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Улучшение читаемости текста */
+p {
+ font-size: 16px;
+ line-height: 1.8;
+ color: rgba(255,255,255,0.9);
+}
+
+Давайте завершим CSS стили для нашего кулинарного сайта, добавив последние штрихи.
+
+```css
+/* Продолжение стилей для заголовков */
+h1, h2, h3, h4, h5, h6 {
+ color: var(--text-color);
+ margin-bottom: 20px;
+ letter-spacing: 1px;
+}
+
+h1 {
+ font-size: 36px;
+}
+
+h2 {
+ font-size: 32px;
+}
+
+h3 {
+ font-size: 28px;
+}
+
+h4 {
+ font-size: 24px;
+}
+
+h5 {
+ font-size: 20px;
+}
+
+h6 {
+ font-size: 18px;
+}
+
+/* Стили для иконок */
+.icon {
+ width: 24px;
+ height: 24px;
+ margin-right: 10px;
+ fill: var(--accent-color);
+ transition: fill 0.3s;
+}
+
+.icon:hover {
+ fill: var(--highlight-color);
+}
+
+/* Стили для карточек рецептов */
+.recipe-card {
+ transition: all 0.3s ease;
+ cursor: pointer;
+}
+
+.recipe-card:hover {
+ transform: scale(1.02);
+ box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+/* Стили для хлебных крошек */
+.breadcrumb {
+ margin: 40px 0;
+}
+
+.breadcrumb a {
+ color: var(--text-color);
+ text-decoration: none;
+}
+
+.breadcrumb a:hover {
+ color: var(--highlight-color);
+}
+
+/* Стили для карточек категорий */
+.category-card {
+ padding: 20px;
+ margin-bottom: 20px;
+ border-radius: 8px;
+ background: var(--secondary-color);
+ transition: all 0.3s;
+}
+
+.category-card:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Стили для модального окна */
+.modal {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: rgba(0,0,0,0.7);
+ display: none;
+ justify-content: center;
+ align-items: center;
+}
+
+.modal.active {
+ display: flex;
+}
+
+.modal-content {
+ background: var(--primary-color);
+ padding: 30px;
+ border-radius: 8px;
+ max-width: 600px;
+ width: 100%;
+}
+
+/* Стили для pagination */
+.pagination {
+ margin-top: 40px;
+ display: flex;
+ justify-content: center;
+}
+
+.pagination a {
+ margin: 0 10px;
+ color: var(--text-color);
+}
+
+.pagination a.active {
+ background: var(--highlight-color);
+ padding: 5px 10px;
+ border-radius: 5px;
+}
+
+/* Улучшение форм */
+.form-group {
+ margin-bottom: 20px;
+}
+
+.form-group label {
+ display: block;
+ margin-bottom: 10px;
+ color: var(--text-color);
+}
+
+/* Стили для ошибок валидации */
+.error {
+ color: #e74c3c;
+ font-size: 14px;
+ margin-top: 5px;
+}
+
+/* Улучшение читаемости кода */
+code {
+ background: rgba(255,255,255,0.1);
+ padding: 5px;
+ border-radius: 4px;
+ font-family: 'Monospace', monospace;
+}
+
+/* Оптимизация для печати */
+@media print {
+ body {
+ background: none;
+ color: #000;
+ }
+ 
+ .header-container,
+ .footer-container,
+ .btn,
+ .modal {
+ display: none;
+ }
+}
+
+/* Улучшение доступности */
+/* Стили для фокуса элементов */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus {
+ outline: 2px solid var(--highlight-color);
+ outline-offset: 2px;
+ box-shadow: 0 0 0 3px rgba(255,255,255,0.5);
+}
+
+/* Улучшение доступности форм */
+.form-group input:focus,
+.form-group textarea:focus {
+ border-color: var(--highlight-color);
+ box-shadow: 0 0 0 3px rgba(255,255,255,0.5);
+}
+
+/* Стили для прелоадера */
+.loader {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: var(--primary-color);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ z-index: 9999;
+}
+
+.loader.hidden {
+ display: none;
+}
+
+.loader-icon {
+ width: 64px;
+ height: 64px;
+ animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+ from {
+ transform: rotate(0deg);
+ }
+ to {
+ transform: rotate(360deg);
+ }
+}
+
+/* Улучшение типографики */
+.lead {
+ font-size: 18px;
+ font-weight: 500;
+ line-height: 1.7;
+ color: rgba(255,255,255,0.8);
+}
+
+/* Стили для списков */
+ul,
+ol {
+ margin-bottom: 20px;
+ padding-left: 20px;
+}
+
+li {
+ margin-bottom: 10px;
+}
+
+/* Улучшение таблиц */
+table {
+ width: 100%;
+ border-collapse: collapse;
+ margin-bottom: 20px;
+}
+
+th,
+td {
+ padding: 12px;
+ border: 1px solid rgba(255,255,255,0.3);
+ text-align: left;
+}
+
+th {
+ background: rgba(255,255,255,0.1);
+}
+
+/* Оптимизация для тёмного режима */
+@media (prefers-color-scheme: dark) {
+ body {
+ background: var(--primary-color);
+ color: var(--text-color);
+ }
+}
+
+/* Финальные медиазапросы */
+@media (max-width: 320px) {
+ .btn {
+ padding: 10px 15px;
+ font-size: 14px;
+ }
+ 
+ .recipe-card {
+ padding: 15px;
+ }
+ 
+ .recipe-image {
+ height: 200px;
+ }
+}
+
+/* Общие улучшения производительности */
+img {
+ max-width: 100%;
+ height: auto;
+ object-fit: cover;
+}
+
+video {
+ max-width: 100%;
+ height: auto;
+}
+
+/* Очищающие стили */
+.clearfix::after {
+ content: '';
+ display: block;
+ clear: both;
+}
+
+/* Завершающие стили */
+body {
+ -webkit-font-smoothing: antialiased;
+ -moz-osx-font-smoothing: grayscale;
+}
+
+/* Отключение выделения текста */
+.no-select {
+ user-select: none;
+ -webkit-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+}
+
+/* Стили для облачных контейнеров */
+.recipe-cloud {
+    position: relative;
+    width: 80%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 40px 0;
+}
+
+.cloud-wrapper {
+    position: relative;
+    background: var(--primary-color);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.cloud-wrapper::before,
+.cloud-wrapper::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color);
+    border-radius: 50%;
+}
+
+.cloud-wrapper::before {
+    transform: translate(-25%, 100%);
+}
+
+.cloud-wrapper::after {
+    right: 0;
+    left: auto;
+    transform: translate(25%, 100%);
+}
+
+.cloud-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: all 0.3s;
+    background: var(--secondary-color);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    max-width: 90%;
+}
+
+.cloud-wrapper:hover .cloud-content {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+/* Анимации облачных элементов */
+@keyframes cloudAnimation {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.cloud-wrapper {
+    animation: cloudAnimation 0.5s ease-out;
+}
+
+/* Стили для содержимого облака */
+.cloud-content h3 {
+    margin: 0 0 10px;
+    color: var(--text-color);
+    font-size: 18px;
+}
+
+.cloud-content p {
+    margin: 10px 0;
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+.cloud-content .btn {
+    margin-top: 15px;
+    background: var(--highlight-color);
+    color: var(--text-color);
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+/* Медиазапросы для мобильных устройств */
+@media (max-width: 768px) {
+    .cloud-wrapper {
+        padding: 15px;
+    }
+    
+    .cloud-content {
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Питомец для готовки | Духовка-таймер</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            color: #5a3921;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #d2691e;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #8b4513;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .pet-container {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .timer-container {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .pet {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .pet-body {
+            width: 150px;
+            height: 150px;
+            background: #ffb6c1;
+            border-radius: 50%;
+            position: absolute;
+            top: 50px;
+            left: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .pet-face {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            width: 120px;
+            height: 100px;
+        }
+
+        .pet-eye {
+            width: 25px;
+            height: 25px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 30px;
+            border: 2px solid #5a3921;
+        }
+
+        .pet-eye.left {
+            left: 20px;
+        }
+
+        .pet-eye.right {
+            right: 20px;
+        }
+
+        .pet-pupil {
+            width: 12px;
+            height: 12px;
+            background: #5a3921;
+            border-radius: 50%;
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            transition: all 0.3s;
+        }
+
+        .pet-mouth {
+            width: 40px;
+            height: 20px;
+            border-bottom: 3px solid #5a3921;
+            border-radius: 0 0 20px 20px;
+            position: absolute;
+            bottom: 20px;
+            left: 40px;
+            transition: all 0.3s;
+        }
+
+        .pet-ear {
+            width: 40px;
+            height: 50px;
+            background: #ff91a4;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+        }
+
+        .pet-ear.left {
+            left: 25px;
+            transform: rotate(-30deg);
+        }
+
+        .pet-ear.right {
+            right: 25px;
+            transform: rotate(30deg);
+        }
+
+        .pet-message {
+            background: white;
+            border: 2px solid #d2691e;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.1rem;
+            position: relative;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .pet-message::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid #d2691e;
+        }
+
+        .pet-message::after {
+            content: '';
+            position: absolute;
+            top: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid white;
+        }
+
+        .pet-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pet-btn {
+            background: #d2691e;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .pet-btn:hover {
+            background: #b35917;
+            transform: translateY(-2px);
+        }
+
+        .timer-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #d2691e;
+            margin: 20px 0;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .timer-btn {
+            background: #d2691e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .timer-btn:hover {
+            background: #b35917;
+            transform: translateY(-2px);
+        }
+
+        .timer-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .timer-presets {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .preset-btn {
+            background: #ffb6c1;
+            color: #5a3921;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .preset-btn:hover {
+            background: #ff91a4;
+            transform: translateY(-2px);
+        }
+
+        .oven {
+            width: 200px;
+            height: 150px;
+            background: #8b4513;
+            border-radius: 10px;
+            margin-top: 20px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .oven-door {
+            width: 180px;
+            height: 130px;
+            background: #a0522d;
+            border-radius: 8px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #5a3921;
+        }
+
+        .oven-window {
+            width: 120px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 5px;
+            border: 2px solid #5a3921;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            color: #d2691e;
+        }
+
+        .oven-handle {
+            width: 20px;
+            height: 60px;
+            background: #5a3921;
+            border-radius: 10px;
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: #d2691e;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s linear;
+        }
+
+        .completed {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pet-happy .pet-mouth {
+            border-radius: 20px 20px 0 0;
+            border-top: 3px solid #5a3921;
+            border-bottom: none;
+        }
+
+        .pet-sleeping .pet-eye {
+            height: 5px;
+            border-radius: 5px;
+        }
+
+        .pet-sleeping .pet-pupil {
+            display: none;
+        }
+
+        .pet-sleeping .pet-mouth {
+            width: 30px;
+            border-bottom: 3px solid #5a3921;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .pet-eating .pet-mouth {
+            animation: eat 0.5s infinite;
+        }
+
+        @keyframes eat {
+            0% { transform: scaleY(1); }
+            50% { transform: scaleY(0.7); }
+            100% { transform: scaleY(1); }
+        }
+
+        .pet-playing .pet-body {
+            animation: bounce 0.5s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 650px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .pet-container, .timer-container {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Питомец для готовки</h1>
+            <p>Поиграйте с питомцем, пока еда готовится в духовке!</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="pet-container">
+                <h2>Ваш питомец</h2>
+                <div class="pet" id="pet">
+                    <div class="pet-ear left"></div>
+                    <div class="pet-ear right"></div>
+                    <div class="pet-body">
+                        <div class="pet-face">
+                            <div class="pet-eye left">
+                                <div class="pet-pupil"></div>
+                            </div>
+                            <div class="pet-eye right">
+                                <div class="pet-pupil"></div>
+                            </div>
+                            <div class="pet-mouth"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pet-message" id="pet-message">
+                    Привет! Установи таймер, и я скажу, когда еда будет готова!
+                </div>
+                
+                <div class="pet-actions">
+                    <button class="pet-btn" id="play-btn">
+                        <i class="fas fa-gamepad"></i> Поиграть
+                    </button>
+                    <button class="pet-btn" id="feed-btn">
+                        <i class="fas fa-utensils"></i> Покормить
+                    </button>
+                    <button class="pet-btn" id="sleep-btn">
+                        <i class="fas fa-bed"></i> Уложить спать
+                    </button>
+                    <button class="pet-btn" id="pet-btn">
+                        <i class="fas fa-hand"></i> Погладить
+                    </button>
+                </div>
+            </div>
+            
+            <div class="timer-container">
+                <h2>Таймер духовки</h2>
+                <div class="timer-display" id="timer-display">00:00</div>
+                
+                <div class="timer-controls">
+                    <button class="timer-btn" id="start-btn">
+                        <i class="fas fa-play"></i> Старт
+                    </button>
+                    <button class="timer-btn" id="pause-btn" disabled>
+                        <i class="fas fa-pause"></i> Пауза
+                    </button>
+                    <button class="timer-btn" id="reset-btn">
+                        <i class="fas fa-redo"></i> Сброс
+                    </button>
+                </div>
+                
+                <div class="timer-presets">
+                    <button class="preset-btn" data-minutes="5">5 мин</button>
+                    <button class="preset-btn" data-minutes="10">10 мин</button>
+                    <button class="preset-btn" data-minutes="15">15 мин</button>
+                    <button class="preset-btn" data-minutes="20">20 мин</button>
+                    <button class="preset-btn" data-minutes="30">30 мин</button>
+                    <button class="preset-btn" data-minutes="45">45 мин</button>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                
+                <div class="oven">
+                    <div class="oven-door">
+                        <div class="oven-window" id="oven-status">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                    </div>
+                    <div class="oven-handle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Элементы управления
+        const pet = document.getElementById('pet');
+        const petMessage = document.getElementById('pet-message');
+        const playBtn = document.getElementById('play-btn');
+        const feedBtn = document.getElementById('feed-btn');
+        const sleepBtn = document.getElementById('sleep-btn');
+        const petBtn = document.getElementById('pet-btn');
+        const timerDisplay = document.getElementById('timer-display');
+        const startBtn = document.getElementById('start-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const progress = document.getElementById('progress');
+        const ovenStatus = document.getElementById('oven-status');
+        const presetBtns = document.querySelectorAll('.preset-btn');
+
+        // Состояние таймера
+        let timerInterval;
+        let timeLeft = 0;
+        let totalTime = 0;
+        let isRunning = false;
+        let isCompleted = false;
+
+        // Состояние питомца
+        let petState = 'normal';
+        let petMood = 'happy';
+
+        // Сообщения питомца
+        const petMessages = {
+            normal: [
+                "Привет! Установи таймер, и я скажу, когда еда будет готова!",
+                "Я люблю наблюдать за готовкой!",
+                "Какой вкусный запах из духовки!",
+                "Надеюсь, ты готовишь что-то вкусное!"
+            ],
+            playing: [
+                "Ура! Играем!",
+                "Это так весело!",
+                "Еще, еще!",
+                "Я люблю играть с тобой!"
+            ],
+            eating: [
+                "Ммм, вкусно!",
+                "Спасибо за еду!",
+                "Я такой сытый!",
+                "Это мое любимое лакомство!"
+            ],
+            sleeping: [
+                "Zzz... я сплю...",
+                "Не мешай мне спать...",
+                "Мне снится вкусная еда...",
+                "Zzz..."
+            ],
+            happy: [
+                "Я так рад!",
+                "Ты лучший!",
+                "Мне так весело с тобой!",
+                "Я тебя люблю!"
+            ],
+            ready: [
+                "Кажется, все уже готово!",
+                "Еда готова! Проверь духовку!",
+                "Время доставать из духовки!",
+                "Пахнет готовым! Проверь таймер!"
+            ]
+        };
+
+        // Функции таймера
+        function startTimer() {
+            if (timeLeft <= 0) return;
+            
+            isRunning = true;
+            startBtn.disabled = true;
+            pauseBtn.disabled = false;
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                // Обновление прогресс-бара
+                const progressPercent = ((totalTime - timeLeft) / totalTime) * 100;
+                progress.style.width = `${progressPercent}%`;
+                
+                // Обновление статуса духовки
+                updateOvenStatus();
+                
+                if (timeLeft <= 0) {
+                    timerComplete();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+            updateOvenStatus();
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timeLeft = 0;
+            totalTime = 0;
+            updateTimerDisplay();
+            progress.style.width = '0%';
+            isCompleted = false;
+            pet.classList.remove('completed');
+            updateOvenStatus();
+            setPetMessage("Таймер сброшен. Установи новое время!");
+        }
+
+        function setTimer(minutes) {
+            if (isRunning) {
+                pauseTimer();
+            }
+            
+            timeLeft = minutes * 60;
+            totalTime = timeLeft;
+            updateTimerDisplay();
+            progress.style.width = '0%';
+            isCompleted = false;
+            pet.classList.remove('completed');
+            
+            // Случайное сообщение питомца
+            const randomMessage = petMessages.normal[Math.floor(Math.random() * petMessages.normal.length)];
+            setPetMessage(`Таймер установлен на ${minutes} минут. ${randomMessage}`);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function timerComplete() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            isCompleted = true;
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+            
+            // Анимация завершения
+            pet.classList.add('completed');
+            
+            // Сообщение питомца
+            const randomMessage = petMessages.ready[Math.floor(Math.random() * petMessages.ready.length)];
+            setPetMessage(randomMessage);
+            
+            // Звуковое оповещение (в реальном приложении)
+            // new Audio('notification.mp3').play().catch(() => {});
+            
+            // Мигание таймера
+            let blinkCount = 0;
+            const blinkInterval = setInterval(() => {
+                timerDisplay.style.visibility = timerDisplay.style.visibility === 'hidden' ? 'visible' : 'hidden';
+                blinkCount++;
+                
+                if (blinkCount >= 10) {
+                    clearInterval(blinkInterval);
+                    timerDisplay.style.visibility = 'visible';
+                }
+            }, 500);
+        }
+
+        function updateOvenStatus() {
+            if (isCompleted) {
+                ovenStatus.innerHTML = '<i class="fas fa-bell"></i>';
+                ovenStatus.style.color = '#ff0000';
+            } else if (isRunning) {
+                ovenStatus.innerHTML = '<i class="fas fa-fire"></i>';
+                ovenStatus.style.color = '#ff4500';
+            } else if (timeLeft > 0) {
+                ovenStatus.innerHTML = '<i class="fas fa-pause"></i>';
+                ovenStatus.style.color = '#d2691e';
+            } else {
+                ovenStatus.innerHTML = '<i class="fas fa-utensils"></i>';
+                ovenStatus.style.color = '#d2691e';
+            }
+        }
+
+        // Функции питомца
+        function setPetMessage(message) {
+            petMessage.textContent = message;
+        }
+
+        function playWithPet() {
+            petState = 'playing';
+            pet.classList.add('pet-playing');
+            pet.classList.remove('pet-sleeping', 'pet-eating', 'pet-happy');
+            
+            const randomMessage = petMessages.playing[Math.floor(Math.random() * petMessages.playing.length)];
+            setPetMessage(randomMessage);
+            
+            setTimeout(() => {
+                pet.classList.remove('pet-playing');
+                petState = 'normal';
+            }, 3000);
+        }
+
+        function feedPet() {
+            petState = 'eating';
+            pet.classList.add('pet-eating');
+            pet.classList.remove('pet-playing', 'pet-sleeping', 'pet-happy');
+            
+            const randomMessage = petMessages.eating[Math.floor(Math.random() * petMessages.eating.length)];
+            setPetMessage(randomMessage);
+            
+            setTimeout(() => {
+                pet.classList.remove('pet-eating');
+                petState = 'normal';
+            }, 3000);
+        }
+
+        function putPetToSleep() {
+            petState = 'sleeping';
+            pet.classList.add('pet-sleeping');
+            pet.classList.remove('pet-playing', 'pet-eating', 'pet-happy');
+            
+            const randomMessage = petMessages.sleeping[Math.floor(Math.random() * petMessages.sleeping.length)];
+            setPetMessage(randomMessage);
+            
+            setTimeout(() => {
+                pet.classList.remove('pet-sleeping');
+                petState = 'normal';
+                setPetMessage("Я выспался! Что там в духовке?");
+            }, 5000);
+        }
+
+        function petPet() {
+            petMood = 'happy';
+            pet.classList.add('pet-happy');
+            pet.classList.remove('pet-playing', 'pet-eating', 'pet-sleeping');
+            
+            const randomMessage = petMessages.happy[Math.floor(Math.random() * petMessages.happy.length)];
+            setPetMessage(randomMessage);
+            
+            setTimeout(() => {
+                pet.classList.remove('pet-happy');
+                petMood = 'normal';
+            }, 3000);
+        }
+
+        // Назначение обработчиков событий
+        startBtn.addEventListener('click', startTimer);
+        pauseBtn.addEventListener('click', pauseTimer);
+        resetBtn.addEventListener('click', resetTimer);
+        playBtn.addEventListener('click', playWithPet);
+        feedBtn.addEventListener('click', feedPet);
+        sleepBtn.addEventListener('click', putPetToSleep);
+        petBtn.addEventListener('click', petPet);
+
+        presetBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const minutes = parseInt(btn.getAttribute('data-minutes'));
+                setTimer(minutes);
+            });
+        });
+
+        // Инициализация
+        updateTimerDisplay();
+        updateOvenStatus();
+    </script>
+</body>
+</html>

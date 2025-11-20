@@ -1,0 +1,1994 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet Bakery | Мир изысканной выпечки</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary: #d4a76a;
+            --secondary: #8b4513;
+            --accent: #ff6b6b;
+            --light: #fffaf0;
+            --dark: #3c2f2f;
+            --transition: all 0.3s ease;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(212, 167, 106, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(212, 167, 106, 0.4);
+            background: var(--secondary);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Header Styles */
+        .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 250, 240, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0;
+        }
+
+        .nav ul {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav a {
+            font-weight: 600;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav a:hover::after {
+            width: 100%;
+        }
+
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 20px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: rgba(212, 167, 106, 0.1);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .language-switcher:hover {
+            background: rgba(212, 167, 106, 0.2);
+        }
+
+        .language-flag {
+            width: 24px;
+            height: 16px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .language-flag img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .language-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            min-width: 150px;
+            z-index: 1001;
+            display: none;
+            margin-top: 5px;
+        }
+
+        .language-dropdown.active {
+            display: block;
+        }
+
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .language-option:hover {
+            background: rgba(212, 167, 106, 0.1);
+        }
+
+        .language-option.active {
+            background: rgba(212, 167, 106, 0.2);
+            font-weight: 600;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        /* Hero Section */
+        .hero-container {
+            background: linear-gradient(135deg, rgba(212, 167, 106, 0.9), rgba(139, 69, 19, 0.8)), url('https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100px, -100px); }
+        }
+
+        .hero {
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero .btn {
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Categories Section */
+        .categories-container {
+            background: var(--light);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .category-card h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        /* Recipes Section */
+        .recipes-container {
+            background: #f9f5f0;
+        }
+
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .recipe-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .recipe-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .recipe-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .recipe-card:hover .recipe-image img {
+            transform: scale(1.1);
+        }
+
+        .recipe-info {
+            padding: 20px;
+        }
+
+        .recipe-info h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .recipe-rating {
+            color: var(--primary);
+        }
+
+        /* Recipe Modal */
+        .recipe-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 900px;
+            margin: 50px auto;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.5s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .modal-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-body {
+            padding: 40px;
+        }
+
+        .modal-title {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        .modal-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .recipe-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .recipe-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .ingredients h3, .instructions h3 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .ingredients ul {
+            list-style-type: none;
+        }
+
+        .ingredients li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .ingredients li:last-child {
+            border-bottom: none;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+
+        .instructions li::marker {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* About Section */
+        .about-container {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-content h2 {
+            color: white;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+        }
+
+        /* Gallery Section */
+        .gallery-container {
+            background: var(--light);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery-item {
+            height: 250px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay i {
+            color: white;
+            font-size: 2rem;
+        }
+
+        /* Contact Section */
+        .contact-container {
+            background: #f9f5f0;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .contact-form h3 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--secondary);
+        }
+
+        .contact-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(212, 167, 106, 0.2);
+        }
+
+        .contact-form textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        .footer-container {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-logo h2 {
+            background: linear-gradient(45deg, var(--primary), white);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .footer-links h3,
+        .footer-newsletter h3 {
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-links h3::after,
+        .footer-newsletter h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-links ul {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links a {
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: var(--radius);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Language Switcher Mobile */
+        .mobile-language-switcher {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            --light: #2a2a2a;
+            --dark: #f5f5f5;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        body.dark-mode .header-container {
+            background: rgba(42, 42, 42, 0.95);
+        }
+
+        body.dark-mode .recipe-card,
+        body.dark-mode .category-card,
+        body.dark-mode .contact-form,
+        body.dark-mode .modal-content {
+            background: #3a3a3a;
+            color: var(--dark);
+        }
+
+        body.dark-mode .contact-form input,
+        body.dark-mode .contact-form textarea {
+            background: #4a4a4a;
+            border-color: #4a4a4a;
+            color: var(--dark);
+        }
+
+        body.dark-mode .recipes-container,
+        body.dark-mode .contact-container {
+            background: #333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h2 {
+                font-size: 2.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: var(--transition);
+                z-index: 999;
+                padding: 20px;
+            }
+
+            .nav.active {
+                right: 0;
+            }
+
+            .nav ul {
+                flex-direction: column;
+                gap: 30px;
+                text-align: center;
+            }
+
+            .language-switcher {
+                display: none;
+            }
+
+            .mobile-language-switcher {
+                display: block;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                z-index: 1000;
+            }
+
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            section {
+                padding: 60px 0;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .contact-form {
+                padding: 20px;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .modal-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header-container">
+        <div class="container">
+            <div class="header">
+                <div class="logo">
+                    <h1>Sweet Bakery</h1>
+                </div>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="#home" data-i18n="nav.home">Главная</a></li>
+                        <li><a href="#categories" data-i18n="nav.categories">Категории</a></li>
+                        <li><a href="#recipes" data-i18n="nav.recipes">Рецепты</a></li>
+                        <li><a href="#gallery" data-i18n="nav.gallery">Избранные рецепты</a></li>
+                        <li><a href="pet-timer.html" data-i18n="nav.pet">Питомец-таймер</a></li>
+                        <li><a href="#about" data-i18n="nav.about">О нас</a></li>
+                        <li><a href="#contact" data-i18n="nav.contact">Контакты</a></li>
+                        <li class="language-switcher" id="language-switcher">
+                            <div class="language-flag">
+                                <img src="https://flagcdn.com/w40/ru.png" alt="Russian Flag" id="current-flag">
+                            </div>
+                            <span class="language-name" id="current-language">Русский</span>
+                            <i class="fas fa-chevron-down"></i>
+                            <div class="language-dropdown" id="language-dropdown">
+                                <div class="language-option" data-lang="ru">
+                                    <div class="language-flag">
+                                        <img src="https://flagcdn.com/w40/ru.png" alt="Russian Flag">
+                                    </div>
+                                    <span class="language-name">Русский</span>
+                                </div>
+                                <div class="language-option" data-lang="en">
+                                    <div class="language-flag">
+                                        <img src="https://flagcdn.com/w40/gb.png" alt="British Flag">
+                                    </div>
+                                    <span class="language-name">English</span>
+                                </div>
+                                <div class="language-option" data-lang="de">
+                                    <div class="language-flag">
+                                        <img src="https://flagcdn.com/w40/de.png" alt="German Flag">
+                                    </div>
+                                    <span class="language-name">Deutsch</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="mobile-language-switcher">
+                        <!-- ... мобильная версия языкового переключателя -->
+                    </div>
+                </nav>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-container">
+        <div class="container">
+            <div class="hero">
+                <h2 data-i18n="hero.title">Мир изысканной выпечки</h2>
+                <p data-i18n="hero.subtitle">Откройте для себя лучшие рецепты выпечки от профессиональных кондитеров</p>
+                <a href="#recipes" class="btn" data-i18n="hero.button">Исследовать рецепты</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="categories-container">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="categories.title">Категории выпечки</h2>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-birthday-cake"></i>
+                    </div>
+                    <h3 data-i18n="categories.cakes">Торты</h3>
+                    <p data-i18n="categories.cakesDesc">Праздничные и повседневные торты на любой вкус</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-cookie"></i>
+                    </div>
+                    <h3 data-i18n="categories.cookies">Печенье</h3>
+                    <p data-i18n="categories.cookiesDesc">Хрустящее, мягкое, с шоколадом и орехами</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-bread-slice"></i>
+                    </div>
+                    <h3 data-i18n="categories.bread">Хлеб</h3>
+                    <p data-i18n="categories.breadDesc">Домашний хлеб на закваске и дрожжевой</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-pie"></i>
+                    </div>
+                    <h3 data-i18n="categories.pies">Пироги</h3>
+                    <p data-i18n="categories.piesDesc">Сладкие и соленые пироги с разнообразными начинками</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipes Section -->
+    <section id="recipes" class="recipes-container">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="recipes.title">Популярные рецепты</h2>
+            </div>
+            <div class="recipe-grid">
+                <div class="recipe-card" data-recipe="chocolate-cake">
+                    <div class="recipe-image">
+                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Шоколадный торт">
+                    </div>
+                    <div class="recipe-info">
+                        <h3 data-i18n="recipes.chocolateCake.title">Шоколадный торт</h3>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> <span data-i18n="recipes.chocolateCake.time">90 мин</span></span>
+                            <span class="recipe-rating"><i class="fas fa-star"></i> 4.9</span>
+                        </div>
+                        <p data-i18n="recipes.chocolateCake.desc">Нежнейший шоколадный торт с насыщенным вкусом</p>
+                        <button class="btn view-recipe" data-i18n="recipes.viewRecipe">Смотреть рецепт</button>
+                    </div>
+                </div>
+                <div class="recipe-card" data-recipe="croissants">
+                    <div class="recipe-image">
+                        <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Круассаны">
+                    </div>
+                    <div class="recipe-info">
+                        <h3 data-i18n="recipes.croissants.title">Французские круассаны</h3>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> <span data-i18n="recipes.croissants.time">180 мин</span></span>
+                            <span class="recipe-rating"><i class="fas fa-star"></i> 4.8</span>
+                        </div>
+                        <p data-i18n="recipes.croissants.desc">Слоеные круассаны с маслянистой текстурой</p>
+                        <button class="btn view-recipe" data-i18n="recipes.viewRecipe">Смотреть рецепт</button>
+                    </div>
+                </div>
+                <div class="recipe-card" data-recipe="apple-strudel">
+                    <div class="recipe-image">
+                        <img src="https://images.unsplash.com/photo-1603532648955-039310d9ed75?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Пирог с яблоками">
+                    </div>
+                    <div class="recipe-info">
+                        <h3 data-i18n="recipes.appleStrudel.title">Яблочный штрудель</h3>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> <span data-i18n="recipes.appleStrudel.time">60 мин</span></span>
+                            <span class="recipe-rating"><i class="fas fa-star"></i> 4.7</span>
+                        </div>
+                        <p data-i18n="recipes.appleStrudel.desc">Тонкое тесто с ароматной яблочной начинкой</p>
+                        <button class="btn view-recipe" data-i18n="recipes.viewRecipe">Смотреть рецепт</button>
+                    </div>
+                </div>
+                <div class="recipe-card" data-recipe="chocolate-muffins">
+                    <div class="recipe-image">
+                        <img src="https://images.unsplash.com/photo-1587241321921-91a834d6d191?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Кексы">
+                    </div>
+                    <div class="recipe-info">
+                        <h3 data-i18n="recipes.chocolateMuffins.title">Шоколадные кексы</h3>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> <span data-i18n="recipes.chocolateMuffins.time">45 мин</span></span>
+                            <span class="recipe-rating"><i class="fas fa-star"></i> 4.9</span>
+                        </div>
+                        <p data-i18n="recipes.chocolateMuffins.desc">Нежные кексы с шоколадной глазурью</p>
+                        <button class="btn view-recipe" data-i18n="recipes.viewRecipe">Смотреть рецепт</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipe Modals -->
+    <div id="recipe-modal" class="recipe-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img id="modal-image" src="" alt="">
+                <div class="modal-close">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <h2 id="modal-title" class="modal-title"></h2>
+                <div class="modal-meta">
+                    <span><i class="far fa-clock"></i> <span id="modal-time"></span></span>
+                    <span><i class="fas fa-user-friends"></i> <span id="modal-servings" data-i18n="modal.servings">порций</span></span>
+                    <span><i class="fas fa-star"></i> <span id="modal-rating"></span></span>
+                </div>
+                <div class="recipe-details">
+                    <div class="ingredients">
+                        <h3 data-i18n="modal.ingredients">Ингредиенты</h3>
+                        <ul id="modal-ingredients"></ul>
+                    </div>
+                    <div class="instructions">
+                        <h3 data-i18n="modal.instructions">Инструкция</h3>
+                        <ol id="modal-instructions"></ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery-container">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="gallery.title">Избранные рецепты</h2>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Выпечка">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Выпечка">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1555507036-ab794f27d2e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Выпечка">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Выпечка">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-container">
+        <div class="container">
+            <div class="about-content">
+                <h2 data-i18n="about.title">О нашем проекте</h2>
+                <p data-i18n="about.text1">Sweet Bakery - это сообщество любителей выпечки, где мы делимся лучшими рецептами, техниками и советами от профессиональных кондитеров. Наша миссия - вдохновлять вас на создание вкусной и красивой выпечки дома.</p>
+                <p data-i18n="about.text2">Присоединяйтесь к нашему сообществу и откройте для себя мир ароматной свежей выпечки!</p>
+                <a href="#contact" class="btn btn-secondary" data-i18n="about.button">Присоединиться</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-container">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="contact.title">Свяжитесь с нами</h2>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h3 data-i18n="contact.address">Адрес</h3>
+                            <p data-i18n="contact.addressValue">ул. Кондитерская, 15, Москва</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h3 data-i18n="contact.phone">Телефон</h3>
+                            <p>+7 (495) 123-45-67</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h3 data-i18n="contact.email">Email</h3>
+                            <p>info@sweetbakery.ru</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <h3 data-i18n="contact.hours">Время работы</h3>
+                            <p data-i18n="contact.hoursValue">Пн-Пт: 9:00 - 20:00<br>Сб-Вс: 10:00 - 18:00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3 data-i18n="contact.formTitle">Отправить сообщение</h3>
+                    <form id="contactForm">
+                        <input type="text" placeholder="Ваше имя" data-i18n-placeholder="contact.namePlaceholder" required>
+                        <input type="email" placeholder="Email" data-i18n-placeholder="contact.emailPlaceholder" required>
+                        <textarea placeholder="Сообщение" data-i18n-placeholder="contact.messagePlaceholder" required></textarea>
+                        <button type="submit" class="btn" data-i18n="contact.sendButton">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-container">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Sweet Bakery</h2>
+                    <p data-i18n="footer.tagline">Лучшие рецепты выпечки для вашего вдохновения</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3 data-i18n="footer.quickLinks">Быстрые ссылки</h3>
+                    <ul>
+                        <li><a href="#home" data-i18n="nav.home">Главная</a></li>
+                        <li><a href="#categories" data-i18n="nav.categories">Категории</a></li>
+                        <li><a href="#recipes" data-i18n="nav.recipes">Рецепты</a></li>
+                        <li><a href="#gallery" data-i18n="nav.gallery">Избранные рецепты</a></li>
+                        <li><a href="#about" data-i18n="nav.about">О нас</a></li>
+                    </ul>
+                </div>
+                <div class="footer-newsletter">
+                    <h3 data-i18n="footer.newsletter">Рассылка рецептов</h3>
+                    <p data-i18n="footer.newsletterDesc">Подпишитесь на нашу рассылку и получайте новые рецепты каждую неделю</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Ваш email" data-i18n-placeholder="footer.emailPlaceholder" required>
+                        <button type="submit" class="btn" data-i18n="footer.subscribeButton">Подписаться</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Sweet Bakery. <span data-i18n="footer.rights">Все права защищены.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        // Language Data
+        const translations = {
+            'ru': {
+                // Navigation
+                'nav.home': 'Главная',
+                'nav.categories': 'Категории',
+                'nav.recipes': 'Рецепты',
+                'nav.gallery': 'Избранные рецепты',
+                'nav.about': 'О нас',
+                'nav.contact': 'Контакты',
+                
+                // Hero Section
+                'hero.title': 'Мир изысканной выпечки',
+                'hero.subtitle': 'Откройте для себя лучшие рецепты выпечки от профессиональных кондитеров',
+                'hero.button': 'Исследовать рецепты',
+                
+                // Categories Section
+                'categories.title': 'Категории выпечки',
+                'categories.cakes': 'Торты',
+                'categories.cakesDesc': 'Праздничные и повседневные торты на любой вкус',
+                'categories.cookies': 'Печенье',
+                'categories.cookiesDesc': 'Хрустящее, мягкое, с шоколадом и орехами',
+                'categories.bread': 'Хлеб',
+                'categories.breadDesc': 'Домашний хлеб на закваске и дрожжевой',
+                'categories.pies': 'Пироги',
+                'categories.piesDesc': 'Сладкие и соленые пироги с разнообразными начинками',
+                
+                // Recipes Section
+                'recipes.title': 'Популярные рецепты',
+                'recipes.viewRecipe': 'Смотреть рецепт',
+                'recipes.chocolateCake.title': 'Шоколадный торт',
+                'recipes.chocolateCake.time': '90 мин',
+                'recipes.chocolateCake.desc': 'Нежнейший шоколадный торт с насыщенным вкусом',
+                'recipes.croissants.title': 'Французские круассаны',
+                'recipes.croissants.time': '180 мин',
+                'recipes.croissants.desc': 'Слоеные круассаны с маслянистой текстурой',
+                'recipes.appleStrudel.title': 'Яблочный штрудель',
+                'recipes.appleStrudel.time': '60 мин',
+                'recipes.appleStrudel.desc': 'Тонкое тесто с ароматной яблочной начинкой',
+                'recipes.chocolateMuffins.title': 'Шоколадные кексы',
+                'recipes.chocolateMuffins.time': '45 мин',
+                'recipes.chocolateMuffins.desc': 'Нежные кексы с шоколадной глазурью',
+                
+                // Modal
+                'modal.servings': 'порций',
+                'modal.ingredients': 'Ингредиенты',
+                'modal.instructions': 'Инструкция',
+                
+                // Gallery Section
+                'gallery.title': 'Избранные рецепты',
+                
+                // About Section
+                'about.title': 'О нашем проекте',
+                'about.text1': 'Sweet Bakery - это сообщество любителей выпечки, где мы делимся лучшими рецептами, техниками и советами от профессиональных кондитеров. Наша миссия - вдохновлять вас на создание вкусной и красивой выпечки дома.',
+                'about.text2': 'Присоединяйтесь к нашему сообществу и откройте для себя мир ароматной свежей выпечки!',
+                'about.button': 'Присоединиться',
+                
+                // Contact Section
+                'contact.title': 'Свяжитесь с нами',
+                'contact.address': 'Адрес',
+                'contact.addressValue': 'ул. Кондитерская, 15, Москва',
+                'contact.phone': 'Телефон',
+                'contact.email': 'Email',
+                'contact.hours': 'Время работы',
+                'contact.hoursValue': 'Пн-Пт: 9:00 - 20:00<br>Сб-Вс: 10:00 - 18:00',
+                'contact.formTitle': 'Отправить сообщение',
+                'contact.namePlaceholder': 'Ваше имя',
+                'contact.emailPlaceholder': 'Email',
+                'contact.messagePlaceholder': 'Сообщение',
+                'contact.sendButton': 'Отправить',
+                
+                // Footer
+                'footer.tagline': 'Лучшие рецепты выпечки для вашего вдохновения',
+                'footer.quickLinks': 'Быстрые ссылки',
+                'footer.newsletter': 'Рассылка рецептов',
+                'footer.newsletterDesc': 'Подпишитесь на нашу рассылку и получайте новые рецепты каждую неделю',
+                'footer.emailPlaceholder': 'Ваш email',
+                'footer.subscribeButton': 'Подписаться',
+                'footer.rights': 'Все права защищены.'
+            },
+            'en': {
+                // Navigation
+                'nav.home': 'Home',
+                'nav.categories': 'Categories',
+                'nav.recipes': 'Recipes',
+                'nav.gallery': 'Featured Recipes',
+                'nav.about': 'About',
+                'nav.contact': 'Contact',
+                
+                // Hero Section
+                'hero.title': 'World of Exquisite Baking',
+                'hero.subtitle': 'Discover the best baking recipes from professional pastry chefs',
+                'hero.button': 'Explore Recipes',
+                
+                // Categories Section
+                'categories.title': 'Baking Categories',
+                'categories.cakes': 'Cakes',
+                'categories.cakesDesc': 'Festive and everyday cakes for every taste',
+                'categories.cookies': 'Cookies',
+                'categories.cookiesDesc': 'Crispy, soft, with chocolate and nuts',
+                'categories.bread': 'Bread',
+                'categories.breadDesc': 'Homemade sourdough and yeast bread',
+                'categories.pies': 'Pies',
+                'categories.piesDesc': 'Sweet and savory pies with various fillings',
+                
+                // Recipes Section
+                'recipes.title': 'Popular Recipes',
+                'recipes.viewRecipe': 'View Recipe',
+                'recipes.chocolateCake.title': 'Chocolate Cake',
+                'recipes.chocolateCake.time': '90 min',
+                'recipes.chocolateCake.desc': 'The most delicate chocolate cake with rich flavor',
+                'recipes.croissants.title': 'French Croissants',
+                'recipes.croissants.time': '180 min',
+                'recipes.croissants.desc': 'Flaky croissants with buttery texture',
+                'recipes.appleStrudel.title': 'Apple Strudel',
+                'recipes.appleStrudel.time': '60 min',
+                'recipes.appleStrudel.desc': 'Thin dough with aromatic apple filling',
+                'recipes.chocolateMuffins.title': 'Chocolate Muffins',
+                'recipes.chocolateMuffins.time': '45 min',
+                'recipes.chocolateMuffins.desc': 'Tender muffins with chocolate glaze',
+                
+                // Modal
+                'modal.servings': 'servings',
+                'modal.ingredients': 'Ingredients',
+                'modal.instructions': 'Instructions',
+                
+                // Gallery Section
+                'gallery.title': 'Featured Recipes',
+                
+                // About Section
+                'about.title': 'About Our Project',
+                'about.text1': 'Sweet Bakery is a community of baking enthusiasts where we share the best recipes, techniques and tips from professional pastry chefs. Our mission is to inspire you to create delicious and beautiful baked goods at home.',
+                'about.text2': 'Join our community and discover the world of aromatic fresh baking!',
+                'about.button': 'Join Us',
+                
+                // Contact Section
+                'contact.title': 'Contact Us',
+                'contact.address': 'Address',
+                'contact.addressValue': 'Pastry St., 15, Moscow',
+                'contact.phone': 'Phone',
+                'contact.email': 'Email',
+                'contact.hours': 'Working Hours',
+                'contact.hoursValue': 'Mon-Fri: 9:00 - 20:00<br>Sat-Sun: 10:00 - 18:00',
+                'contact.formTitle': 'Send Message',
+                'contact.namePlaceholder': 'Your Name',
+                'contact.emailPlaceholder': 'Email',
+                'contact.messagePlaceholder': 'Message',
+                'contact.sendButton': 'Send',
+                
+                // Footer
+                'footer.tagline': 'Best baking recipes for your inspiration',
+                'footer.quickLinks': 'Quick Links',
+                'footer.newsletter': 'Recipe Newsletter',
+                'footer.newsletterDesc': 'Subscribe to our newsletter and receive new recipes every week',
+                'footer.emailPlaceholder': 'Your email',
+                'footer.subscribeButton': 'Subscribe',
+                'footer.rights': 'All rights reserved.'
+            },
+            'de': {
+                // Navigation
+                'nav.home': 'Startseite',
+                'nav.categories': 'Kategorien',
+                'nav.recipes': 'Rezepte',
+                'nav.gallery': 'Ausgewählte Rezepte',
+                'nav.about': 'Über uns',
+                'nav.contact': 'Kontakt',
+                
+                // Hero Section
+                'hero.title': 'Welt der exquisiten Backwaren',
+                'hero.subtitle': 'Entdecken Sie die besten Backrezepte von professionellen Konditoren',
+                'hero.button': 'Rezepte erkunden',
+                
+                // Categories Section
+                'categories.title': 'Backwaren-Kategorien',
+                'categories.cakes': 'Torten',
+                'categories.cakesDesc': 'Festliche und alltägliche Torten für jeden Geschmack',
+                'categories.cookies': 'Kekse',
+                'categories.cookiesDesc': 'Knusprige, weiche, mit Schokolade und Nüssen',
+                'categories.bread': 'Brot',
+                'categories.breadDesc': 'Hausgemachtes Sauerteig- und Hefebrot',
+                'categories.pies': 'Kuchen',
+                'categories.piesDesc': 'Süße und herzhafte Kuchen mit verschiedenen Füllungen',
+                
+                // Recipes Section
+                'recipes.title': 'Beliebte Rezepte',
+                'recipes.viewRecipe': 'Rezept ansehen',
+                'recipes.chocolateCake.title': 'Schokoladenkuchen',
+                'recipes.chocolateCake.time': '90 Min',
+                'recipes.chocolateCake.desc': 'Zartester Schokoladenkuchen mit intensivem Geschmack',
+                'recipes.croissants.title': 'Französische Croissants',
+                'recipes.croissants.time': '180 Min',
+                'recipes.croissants.desc': 'Blättrige Croissants mit buttriger Textur',
+                'recipes.appleStrudel.title': 'Apfelstrudel',
+                'recipes.appleStrudel.time': '60 Min',
+                'recipes.appleStrudel.desc': 'Dünner Teig mit aromatischer Apfelfüllung',
+                'recipes.chocolateMuffins.title': 'Schokoladen-Muffins',
+                'recipes.chocolateMuffins.time': '45 Min',
+                'recipes.chocolateMuffins.desc': 'Zarte Muffins mit Schokoladenglasur',
+                
+                // Modal
+                'modal.servings': 'Portionen',
+                'modal.ingredients': 'Zutaten',
+                'modal.instructions': 'Anleitung',
+                
+                // Gallery Section
+                'gallery.title': 'Ausgewählte Rezepte',
+                
+                // About Section
+                'about.title': 'Über unser Projekt',
+                'about.text1': 'Sweet Bakery ist eine Gemeinschaft von Backbegeisterten, in der wir die besten Rezepte, Techniken und Tipps von professionellen Konditoren teilen. Unsere Mission ist es, Sie zu inspirieren, zu Hause leckere und schöne Backwaren zu kreieren.',
+                'about.text2': 'Schließen Sie sich unserer Gemeinschaft an und entdecken Sie die Welt der aromatischen frischen Backwaren!',
+                'about.button': 'Beitreten',
+                
+                // Contact Section
+                'contact.title': 'Kontaktieren Sie uns',
+                'contact.address': 'Adresse',
+                'contact.addressValue': 'Konditoreistr. 15, Moskau',
+                'contact.phone': 'Telefon',
+                'contact.email': 'E-Mail',
+                'contact.hours': 'Öffnungszeiten',
+                'contact.hoursValue': 'Mo-Fr: 9:00 - 20:00<br>Sa-So: 10:00 - 18:00',
+                'contact.formTitle': 'Nachricht senden',
+                'contact.namePlaceholder': 'Ihr Name',
+                'contact.emailPlaceholder': 'E-Mail',
+                'contact.messagePlaceholder': 'Nachricht',
+                'contact.sendButton': 'Senden',
+                
+                // Footer
+                'footer.tagline': 'Beste Backrezepte für Ihre Inspiration',
+                'footer.quickLinks': 'Schnelllinks',
+                'footer.newsletter': 'Rezept-Newsletter',
+                'footer.newsletterDesc': 'Abonnieren Sie unseren Newsletter und erhalten Sie jede Woche neue Rezepte',
+                'footer.emailPlaceholder': 'Ihre E-Mail',
+                'footer.subscribeButton': 'Abonnieren',
+                'footer.rights': 'Alle Rechte vorbehalten.'
+            }
+        };
+
+        // Recipe Data with German translations
+        const recipes = {
+            'chocolate-cake': {
+                title: {
+                    'ru': 'Шоколадный торт',
+                    'en': 'Chocolate Cake',
+                    'de': 'Schokoladenkuchen'
+                },
+                image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                time: {
+                    'ru': '90 мин',
+                    'en': '90 min',
+                    'de': '90 Min'
+                },
+                servings: {
+                    'ru': '8 порций',
+                    'en': '8 servings',
+                    'de': '8 Portionen'
+                },
+                rating: '4.9',
+                ingredients: {
+                    'ru': [
+                        'Мука пшеничная - 250 г',
+                        'Какао-порошок - 80 г',
+                        'Сахар - 300 г',
+                        'Яйца - 4 шт.',
+                        'Сливочное масло - 200 г',
+                        'Молоко - 200 мл',
+                        'Разрыхлитель - 2 ч.л.',
+                        'Ванильный экстракт - 1 ч.л.',
+                        'Соль - щепотка'
+                    ],
+                    'en': [
+                        'Wheat flour - 250 g',
+                        'Cocoa powder - 80 g',
+                        'Sugar - 300 g',
+                        'Eggs - 4 pcs',
+                        'Butter - 200 g',
+                        'Milk - 200 ml',
+                        'Baking powder - 2 tsp',
+                        'Vanilla extract - 1 tsp',
+                        'Salt - pinch'
+                    ],
+                    'de': [
+                        'Weizenmehl - 250 g',
+                        'Kakaopulver - 80 g',
+                        'Zucker - 300 g',
+                        'Eier - 4 Stück',
+                        'Butter - 200 g',
+                        'Milch - 200 ml',
+                        'Backpulver - 2 TL',
+                        'Vanilleextrakt - 1 TL',
+                        'Salz - Prise'
+                    ]
+                },
+                instructions: {
+                    'ru': [
+                        'Разогрейте духовку до 180°C. Смажьте форму для выпечки маслом и посыпьте мукой.',
+                        'В миске смешайте муку, какао, разрыхлитель и соль.',
+                        'В другой миске взбейте масло с сахаром до пышной массы.',
+                        'Добавляйте яйца по одному, продолжая взбивать.',
+                        'Добавьте ванильный экстракт и перемешайте.',
+                        'Поочередно добавляйте сухую смесь и молоко, начиная и заканчивая сухой смесью.',
+                        'Вылейте тесто в форму и выпекайте 40-45 минут до готовности.',
+                        'Дайте остыть в форме 10 минут, затем переверните на решетку.'
+                    ],
+                    'en': [
+                        'Preheat oven to 180°C. Grease a baking pan and dust with flour.',
+                        'In a bowl, mix flour, cocoa, baking powder and salt.',
+                        'In another bowl, beat butter with sugar until fluffy.',
+                        'Add eggs one at a time, continuing to beat.',
+                        'Add vanilla extract and mix.',
+                        'Alternately add dry mixture and milk, starting and ending with dry mixture.',
+                        'Pour the batter into the pan and bake for 40-45 minutes until done.',
+                        'Let cool in the pan for 10 minutes, then turn out onto a rack.'
+                    ],
+                    'de': [
+                        'Heizen Sie den Ofen auf 180°C vor. Fetten Sie eine Backform ein und bestäuben Sie sie mit Mehl.',
+                        'In einer Schüssel Mehl, Kakao, Backpulver und Salz vermischen.',
+                        'In einer anderen Schüssel Butter mit Zucker schaumig schlagen.',
+                        'Eier einzeln unterrühren, weiter schlagend.',
+                        'Vanilleextrakt hinzufügen und vermischen.',
+                        'Abwechselnd die trockene Mischung und Milch zugeben, beginnend und endend mit der trockenen Mischung.',
+                        'Den Teig in die Form gießen und 40-45 Minuten backen, bis er fertig ist.',
+                        '10 Minuten in der Form abkühlen lassen, dann auf ein Gitter stürzen.'
+                    ]
+                }
+            },
+            'croissants': {
+                title: {
+                    'ru': 'Французские круассаны',
+                    'en': 'French Croissants',
+                    'de': 'Französische Croissants'
+                },
+                image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                time: {
+                    'ru': '180 мин',
+                    'en': '180 min',
+                    'de': '180 Min'
+                },
+                servings: {
+                    'ru': '12 шт.',
+                    'en': '12 pcs',
+                    'de': '12 Stück'
+                },
+                rating: '4.8',
+                ingredients: {
+                    'ru': [
+                        'Мука пшеничная - 500 г',
+                        'Молоко - 250 мл',
+                        'Сливочное масло - 300 г',
+                        'Дрожжи сухие - 10 г',
+                        'Сахар - 50 г',
+                        'Соль - 1 ч.л.',
+                        'Яйцо - 1 шт. (для смазки)'
+                    ],
+                    'en': [
+                        'Wheat flour - 500 g',
+                        'Milk - 250 ml',
+                        'Butter - 300 g',
+                        'Dry yeast - 10 g',
+                        'Sugar - 50 g',
+                        'Salt - 1 tsp',
+                        'Egg - 1 pc (for brushing)'
+                    ],
+                    'de': [
+                        'Weizenmehl - 500 g',
+                        'Milch - 250 ml',
+                        'Butter - 300 g',
+                        'Trockenhefe - 10 g',
+                        'Zucker - 50 g',
+                        'Salz - 1 TL',
+                        'Ei - 1 Stück (zum Bestreichen)'
+                    ]
+                },
+                instructions: {
+                    'ru': [
+                        'Смешайте дрожжи с теплым молоком и сахаром, оставьте на 10 минут.',
+                        'Добавьте муку и соль, замесите тесто. Накройте и оставьте на 1 час.',
+                        'Раскатайте тесто в прямоугольник, распределите холодное масло на 2/3 поверхности.',
+                        'Сложите тесто в три слоя, завернув без масла на часть с маслом.',
+                        'Поверните на 90° и снова раскатайте. Повторите складывание 3 раза.',
+                        'Охлаждайте тесто 30 минут между каждым складыванием.',
+                        'Раскатайте тесто толщиной 3-4 мм, нарежьте треугольники.',
+                        'Скатайте треугольники в круассаны, смажьте яйцом.',
+                        'Выпекайте при 200°C 15-20 минут до золотистого цвета.'
+                    ],
+                    'en': [
+                        'Mix yeast with warm milk and sugar, let stand for 10 minutes.',
+                        'Add flour and salt, knead the dough. Cover and let rest for 1 hour.',
+                        'Roll out the dough into a rectangle, spread cold butter over 2/3 of the surface.',
+                        'Fold the dough into three layers, wrapping the unbuttered part over the buttered part.',
+                        'Turn 90° and roll out again. Repeat folding 3 times.',
+                        'Chill the dough for 30 minutes between each folding.',
+                        'Roll out the dough to 3-4 mm thickness, cut into triangles.',
+                        'Roll triangles into croissants, brush with egg.',
+                        'Bake at 200°C for 15-20 minutes until golden brown.'
+                    ],
+                    'de': [
+                        'Hefe mit warmer Milch und Zucker vermischen, 10 Minuten stehen lassen.',
+                        'Mehl und Salz hinzufügen, Teig kneten. Abdecken und 1 Stunde ruhen lassen.',
+                        'Teig zu einem Rechteck ausrollen, kalte Butter auf 2/3 der Fläche verteilen.',
+                        'Teig zu drei Lagen falten, unbutterten Teil über den gebutterten Teil wickeln.',
+                        'Um 90° drehen und erneut ausrollen. Falten 3 Mal wiederholen.',
+                        'Teig zwischen jedem Falten 30 Minuten kühlen.',
+                        'Teig auf 3-4 mm Dicke ausrollen, in Dreiecke schneiden.',
+                        'Dreiecke zu Croissants rollen, mit Ei bestreichen.',
+                        'Bei 200°C 15-20 Minuten backen, bis sie goldbraun sind.'
+                    ]
+                }
+            },
+            // ... остальные рецепты с немецкими переводами
+        };
+
+        // Current language
+        let currentLanguage = 'ru';
+
+        // Language switching functionality
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update all elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            // Update placeholder texts
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+            
+            // Update language switcher
+            const languageNames = {
+                'ru': 'Русский',
+                'en': 'English',
+                'de': 'Deutsch'
+            };
+            
+            const flagUrls = {
+                'ru': 'https://flagcdn.com/w40/ru.png',
+                'en': 'https://flagcdn.com/w40/gb.png',
+                'de': 'https://flagcdn.com/w40/de.png'
+            };
+            
+            document.getElementById('current-language').textContent = languageNames[lang];
+            document.getElementById('mobile-current-language').textContent = languageNames[lang];
+            document.getElementById('current-flag').src = flagUrls[lang];
+            document.getElementById('mobile-current-flag').src = flagUrls[lang];
+            
+            // Update active state in dropdown
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.getAttribute('data-lang') === lang) {
+                    option.classList.add('active');
+                }
+            });
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+            
+            // Close dropdowns
+            closeLanguageDropdowns();
+        }
+
+        // Close language dropdowns
+        function closeLanguageDropdowns() {
+            document.getElementById('language-dropdown').classList.remove('active');
+            document.getElementById('mobile-language-dropdown').classList.remove('active');
+        }
+
+        // Initialize language
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial language
+            switchLanguage(currentLanguage);
+            
+            // Add click event to language switchers
+            document.getElementById('language-switcher').addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.getElementById('language-dropdown').classList.toggle('active');
+            });
+            
+            document.getElementById('mobile-language-switcher').addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.getElementById('mobile-language-dropdown').classList.toggle('active');
+            });
+            
+            // Add click event to language options
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const lang = option.getAttribute('data-lang');
+                    switchLanguage(lang);
+                });
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', closeLanguageDropdowns);
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const nav = document.querySelector('.nav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            mobileMenuBtn.innerHTML = nav.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+
+        // Dark Mode Toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const messages = {
+                'ru': 'Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.',
+                'en': 'Thank you for your message! We will contact you soon.',
+                'de': 'Vielen Dank für Ihre Nachricht! Wir werden uns in Kürze bei Ihnen melden.'
+            };
+            alert(messages[currentLanguage]);
+            this.reset();
+        });
+
+        // Newsletter Form Submission
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const messages = {
+                'ru': 'Спасибо за подписку! Теперь вы будете получать наши лучшие рецепты.',
+                'en': 'Thank you for subscribing! You will now receive our best recipes.',
+                'de': 'Vielen Dank für Ihr Abonnement! Sie erhalten jetzt unsere besten Rezepte.'
+            };
+            alert(messages[currentLanguage]);
+            this.reset();
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header-container');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 250, 240, 0.98)';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 250, 240, 0.95)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.05)';
+            }
+        });
+
+        // Recipe Modal Functionality
+        const modal = document.getElementById('recipe-modal');
+        const modalClose = document.querySelector('.modal-close');
+        const viewRecipeButtons = document.querySelectorAll('.view-recipe');
+
+        // Open modal when recipe card is clicked
+        viewRecipeButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const recipeCard = button.closest('.recipe-card');
+                const recipeId = recipeCard.dataset.recipe;
+                openRecipeModal(recipeId);
+            });
+        });
+
+        // Also open modal when clicking anywhere on the recipe card
+        document.querySelectorAll('.recipe-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('view-recipe')) {
+                    const recipeId = card.dataset.recipe;
+                    openRecipeModal(recipeId);
+                }
+            });
+        });
+
+        // Close modal when X is clicked
+        modalClose.addEventListener('click', closeRecipeModal);
+
+        // Close modal when clicking outside the content
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeRecipeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'block') {
+                closeRecipeModal();
+            }
+        });
+
+        function openRecipeModal(recipeId) {
+            const recipe = recipes[recipeId];
+            if (!recipe) return;
+
+            // Populate modal with recipe data in current language
+            document.getElementById('modal-title').textContent = recipe.title[currentLanguage];
+            document.getElementById('modal-image').src = recipe.image;
+            document.getElementById('modal-time').textContent = recipe.time[currentLanguage];
+            document.getElementById('modal-servings').textContent = recipe.servings[currentLanguage];
+            document.getElementById('modal-rating').textContent = recipe.rating;
+
+            // Populate ingredients
+            const ingredientsList = document.getElementById('modal-ingredients');
+            ingredientsList.innerHTML = '';
+            recipe.ingredients[currentLanguage].forEach(ingredient => {
+                const li = document.createElement('li');
+                li.textContent = ingredient;
+                ingredientsList.appendChild(li);
+            });
+
+            // Populate instructions
+            const instructionsList = document.getElementById('modal-instructions');
+            instructionsList.innerHTML = '';
+            recipe.instructions[currentLanguage].forEach(instruction => {
+                const li = document.createElement('li');
+                li.textContent = instruction;
+                instructionsList.appendChild(li);
+            });
+
+            // Show modal
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRecipeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.recipe-card, .category-card, .gallery-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

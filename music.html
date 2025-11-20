@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify для готовки | Ваши любимые песни</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e1e1e, #121212);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .music-player {
+            background: #282828;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+
+        .player-header {
+            background: #1db954;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .player-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .player-header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .spotify-connect {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.3s;
+        }
+
+        .spotify-connect:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .spotify-connect.connected {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .album-cover {
+            width: 100%;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .album-cover img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            animation: rotate 20s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .album-cover img.playing {
+            animation-play-state: running;
+        }
+
+        .default-cover {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            animation: rotate 20s linear infinite;
+            animation-play-state: paused;
+            color: #1db954;
+            font-size: 3rem;
+        }
+
+        .default-cover.playing {
+            animation-play-state: running;
+        }
+
+        .default-cover span {
+            font-size: 0.8rem;
+            margin-top: 10px;
+            color: #b3b3b3;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .song-info {
+            padding: 0 30px;
+            text-align: center;
+        }
+
+        .song-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .song-artist {
+            font-size: 1rem;
+            color: #b3b3b3;
+            margin-bottom: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .progress-container {
+            padding: 0 30px 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: #535353;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        .progress {
+            height: 100%;
+            background: #1db954;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #b3b3b3;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 30px 30px;
+            gap: 25px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: #b3b3b3;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .control-btn:hover {
+            color: #fff;
+        }
+
+        .control-btn.play-pause {
+            background: #fff;
+            color: #000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+
+        .control-btn.play-pause:hover {
+            transform: scale(1.05);
+        }
+
+        .volume-container {
+            padding: 0 30px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .volume-container i {
+            color: #b3b3b3;
+            font-size: 1rem;
+        }
+
+        .volume-bar {
+            flex: 1;
+            height: 4px;
+            background: #535353;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .volume-level {
+            height: 100%;
+            background: #1db954;
+            border-radius: 2px;
+            width: 70%;
+        }
+
+        .playlist {
+            background: #181818;
+            padding: 20px 30px;
+            border-top: 1px solid #282828;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .playlist h3 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .refresh-playlist {
+            background: none;
+            border: none;
+            color: #b3b3b3;
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 15px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .refresh-playlist:hover {
+            background: rgba(29, 185, 84, 0.2);
+            color: #1db954;
+        }
+
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #282828;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .playlist-item:hover {
+            background: #282828;
+        }
+
+        .playlist-item.active {
+            color: #1db954;
+        }
+
+        .playlist-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .playlist-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .playlist-song {
+            font-weight: 500;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-artist {
+            font-size: 0.8rem;
+            color: #b3b3b3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-duration {
+            font-size: 0.8rem;
+            color: #b3b3b3;
+            margin-left: 10px;
+        }
+
+        .empty-playlist {
+            text-align: center;
+            padding: 30px 0;
+            color: #b3b3b3;
+        }
+
+        .empty-playlist i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .login-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: #282828;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 15px;
+            color: #1db954;
+        }
+
+        .modal-content p {
+            margin-bottom: 20px;
+            color: #b3b3b3;
+        }
+
+        .spotify-login-btn {
+            background: #1db954;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto 15px;
+            transition: background 0.3s;
+        }
+
+        .spotify-login-btn:hover {
+            background: #1ed760;
+        }
+
+        .demo-login-btn {
+            background: transparent;
+            color: #b3b3b3;
+            border: 1px solid #535353;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .demo-login-btn:hover {
+            color: #fff;
+            border-color: #b3b3b3;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1db954;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .audio-source {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="music-player">
+        <div class="player-header">
+            <h1>Spotify для готовки</h1>
+            <p>Ваши любимые песни из Spotify</p>
+            <button class="spotify-connect" id="spotify-connect">
+                <i class="fab fa-spotify"></i> Подключить
+            </button>
+        </div>
+        
+        <div class="album-cover">
+            <div class="default-cover" id="default-cover">
+                <i class="fab fa-spotify"></i>
+                <span>Подключите Spotify</span>
+            </div>
+            <img id="album-cover" style="display: none;" alt="Обложка альбома">
+        </div>
+        
+        <div class="song-info">
+            <div class="song-title" id="song-title">Нет трека</div>
+            <div class="song-artist" id="song-artist">Подключите Spotify чтобы начать</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="time-info">
+                <span id="current-time">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="control-btn" id="shuffle">
+                <i class="fas fa-random"></i>
+            </button>
+            <button class="control-btn" id="prev">
+                <i class="fas fa-step-backward"></i>
+            </button>
+            <button class="control-btn play-pause" id="play-pause">
+                <i class="fas fa-play" id="play-icon"></i>
+            </button>
+            <button class="control-btn" id="next">
+                <i class="fas fa-step-forward"></i>
+            </button>
+            <button class="control-btn" id="repeat">
+                <i class="fas fa-redo"></i>
+            </button>
+        </div>
+        
+        <div class="volume-container">
+            <i class="fas fa-volume-down"></i>
+            <div class="volume-bar" id="volume-bar">
+                <div class="volume-level" id="volume-level"></div>
+            </div>
+            <i class="fas fa-volume-up"></i>
+        </div>
+        
+        <div class="playlist">
+            <h3>
+                Ваши любимые треки
+                <button class="refresh-playlist" id="refresh-playlist">
+                    <i class="fas fa-sync-alt"></i> Обновить
+                </button>
+            </h3>
+            <div id="user-info" style="display: none;"></div>
+            <div id="playlist-container">
+                <div class="empty-playlist">
+                    <i class="fab fa-spotify"></i>
+                    <p>Плейлист пуст</p>
+                    <p>Подключите Spotify чтобы загрузить ваши любимые треки</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="login-modal" id="login-modal">
+        <div class="modal-content">
+            <h2>Подключение к Spotify</h2>
+            <p>Войдите в свой аккаунт Spotify, чтобы слушать любимые треки во время готовки</p>
+            <button class="spotify-login-btn" id="real-login-btn">
+                <i class="fab fa-spotify"></i> Войти через Spotify
+            </button>
+            <p style="margin: 15px 0; color: #b3b3b3;">Или</p>
+            <button class="demo-login-btn" id="demo-login-btn">
+                Попробовать демо-режим
+            </button>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        Успешно подключено к Spotify!
+    </div>
+
+    <!-- Аудио элементы для каждого трека -->
+    <audio id="audio-player" class="audio-source"></audio>
+
+    <script>
+        // Элементы управления
+        const spotifyConnectBtn = document.getElementById('spotify-connect');
+        const loginModal = document.getElementById('login-modal');
+        const realLoginBtn = document.getElementById('real-login-btn');
+        const demoLoginBtn = document.getElementById('demo-login-btn');
+        const playPauseBtn = document.getElementById('play-pause');
+        const playIcon = document.getElementById('play-icon');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        const shuffleBtn = document.getElementById('shuffle');
+        const repeatBtn = document.getElementById('repeat');
+        const progressBar = document.getElementById('progress-bar');
+        const progress = document.getElementById('progress');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationEl = document.getElementById('duration');
+        const volumeBar = document.getElementById('volume-bar');
+        const volumeLevel = document.getElementById('volume-level');
+        const albumCover = document.getElementById('album-cover');
+        const defaultCover = document.getElementById('default-cover');
+        const songTitle = document.getElementById('song-title');
+        const songArtist = document.getElementById('song-artist');
+        const playlistContainer = document.getElementById('playlist-container');
+        const refreshPlaylistBtn = document.getElementById('refresh-playlist');
+        const userInfoContainer = document.getElementById('user-info');
+        const notification = document.getElementById('notification');
+        const audioPlayer = document.getElementById('audio-player');
+
+        // Состояние приложения
+        let isConnected = false;
+        let userPlaylist = [];
+        let currentTrackIndex = -1;
+        let isPlaying = false;
+        let isShuffled = false;
+        let isRepeated = false;
+
+        // Демо-данные Spotify с реальными аудио превью
+        const demoUser = {
+            name: "Демо Пользователь",
+            avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
+        };
+
+        const demoTracks = [
+            {
+                id: "1",
+                title: "Blinding Lights",
+                artist: "The Weeknd",
+                duration: 200,
+                cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                audioUrl: "https://www.soundjay.com/misc/sounds/fail-buzzer-02.wav" // Замените на реальную ссылку
+            },
+            {
+                id: "2",
+                title: "Save Your Tears",
+                artist: "The Weeknd",
+                duration: 215,
+                cover: "https://images.unsplash.com/photo-1571974599782-87624638275f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                audioUrl: "https://www.soundjay.com/misc/sounds/fail-buzzer-02.wav" // Замените на реальную ссылку
+            },
+            {
+                id: "3",
+                title: "Levitating",
+                artist: "Dua Lipa",
+                duration: 203,
+                cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                audioUrl: "https://www.soundjay.com/misc/sounds/fail-buzzer-02.wav" // Замените на реальную ссылку
+            }
+        ];
+
+        // Форматирование времени
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Обновление информации о треке
+        function updateTrackInfo() {
+            if (currentTrackIndex === -1 || userPlaylist.length === 0) {
+                songTitle.textContent = "Нет трека";
+                songArtist.textContent = "Подключите Spotify чтобы начать";
+                albumCover.style.display = 'none';
+                defaultCover.style.display = 'flex';
+                defaultCover.classList.remove('playing');
+                return;
+            }
+            
+            const track = userPlaylist[currentTrackIndex];
+            songTitle.textContent = track.title;
+            songArtist.textContent = track.artist;
+            
+            if (track.cover) {
+                albumCover.src = track.cover;
+                albumCover.style.display = 'block';
+                defaultCover.style.display = 'none';
+            } else {
+                albumCover.style.display = 'none';
+                defaultCover.style.display = 'flex';
+            }
+            
+            // Обновление активного элемента плейлиста
+            updatePlaylistUI();
+        }
+
+        // Обновление UI плейлиста
+        function updatePlaylistUI() {
+            if (userPlaylist.length === 0) {
+                playlistContainer.innerHTML = `
+                    <div class="empty-playlist">
+                        <i class="fab fa-spotify"></i>
+                        <p>Плейлист пуст</p>
+                        <p>Подключите Spotify чтобы загрузить ваши любимые треки</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let playlistHTML = '';
+            userPlaylist.forEach((track, index) => {
+                const isActive = index === currentTrackIndex;
+                playlistHTML += `
+                    <div class="playlist-item ${isActive ? 'active' : ''}" data-index="${index}">
+                        <img src="${track.cover}" alt="Обложка">
+                        <div class="playlist-info">
+                            <div class="playlist-song">${track.title}</div>
+                            <div class="playlist-artist">${track.artist}</div>
+                        </div>
+                        <div class="playlist-duration">${formatTime(track.duration)}</div>
+                    </div>
+                `;
+            });
+            
+            playlistContainer.innerHTML = playlistHTML;
+            
+            // Назначение обработчиков для элементов плейлиста
+            document.querySelectorAll('.playlist-item').forEach(item => {
+                item.addEventListener('click', selectTrack);
+            });
+        }
+
+        // Имитация подключения к Spotify
+        function connectToSpotify() {
+            if (isConnected) {
+                // Отключение
+                isConnected = false;
+                spotifyConnectBtn.innerHTML = '<i class="fab fa-spotify"></i> Подключить';
+                spotifyConnectBtn.classList.remove('connected');
+                
+                userPlaylist = [];
+                currentTrackIndex = -1;
+                
+                if (isPlaying) {
+                    stopPlayback();
+                }
+                
+                userInfoContainer.style.display = 'none';
+                updateTrackInfo();
+                showNotification("Отключено от Spotify");
+            } else {
+                // Показать модальное окно подключения
+                loginModal.classList.add('active');
+            }
+        }
+
+        // Реальное подключение к Spotify (имитация)
+        function realSpotifyLogin() {
+            // В реальном приложении здесь был бы OAuth flow
+            showNotification("В реальном приложении здесь была бы авторизация через Spotify");
+            
+            // Закрываем модальное окно
+            loginModal.classList.remove('active');
+            
+            // Имитируем успешное подключение
+            simulateSpotifyConnection();
+        }
+
+        // Демо-подключение
+        function demoLogin() {
+            // Используем демо-данные
+            loginModal.classList.remove('active');
+            simulateSpotifyConnection(true);
+        }
+
+        // Имитация подключения к Spotify
+        function simulateSpotifyConnection(isDemo = false) {
+            showNotification("Подключение к Spotify...");
+            
+            // Имитируем задержку подключения
+            setTimeout(() => {
+                isConnected = true;
+                spotifyConnectBtn.innerHTML = '<i class="fab fa-spotify"></i> Отключить';
+                spotifyConnectBtn.classList.add('connected');
+                
+                if (isDemo) {
+                    // Используем демо-данные
+                    userPlaylist = [...demoTracks];
+                    currentTrackIndex = 0;
+                    
+                    // Показываем информацию о демо-пользователе
+                    userInfoContainer.innerHTML = `
+                        <div class="user-info">
+                            <img src="${demoUser.avatar}" alt="Аватар" class="user-avatar">
+                            <div class="user-name">${demoUser.name}</div>
+                        </div>
+                    `;
+                    userInfoContainer.style.display = 'block';
+                    
+                    showNotification("Демо-режим активирован! Используются демо-треки");
+                } else {
+                    // В реальном приложении здесь был бы запрос к Spotify API
+                    showNotification("Успешно подключено к Spotify!");
+                }
+                
+                updateTrackInfo();
+            }, 1500);
+        }
+
+        // Воспроизведение/пауза
+        function togglePlay() {
+            if (!isConnected || userPlaylist.length === 0 || currentTrackIndex === -1) {
+                showNotification("Сначала подключитесь к Spotify");
+                return;
+            }
+            
+            if (isPlaying) {
+                pausePlayback();
+            } else {
+                playCurrentTrack();
+            }
+        }
+
+        // Воспроизведение текущего трека
+        function playCurrentTrack() {
+            const track = userPlaylist[currentTrackIndex];
+            
+            // Устанавливаем источник аудио
+            audioPlayer.src = track.audioUrl;
+            
+            // Устанавливаем длительность
+            audioPlayer.addEventListener('loadedmetadata', () => {
+                durationEl.textContent = formatTime(audioPlayer.duration);
+            });
+            
+            // Запускаем воспроизведение
+            audioPlayer.play().then(() => {
+                playIcon.classList.remove('fa-play');
+                playIcon.classList.add('fa-pause');
+                
+                if (track.cover) {
+                    albumCover.classList.add('playing');
+                } else {
+                    defaultCover.classList.add('playing');
+                }
+                
+                isPlaying = true;
+                
+                // Обновляем прогресс
+                audioPlayer.addEventListener('timeupdate', updateProgress);
+                
+            }).catch(error => {
+                console.error("Ошибка воспроизведения:", error);
+                showNotification("Ошибка воспроизведения трека");
+            });
+        }
+
+        // Пауза
+        function pausePlayback() {
+            audioPlayer.pause();
+            playIcon.classList.remove('fa-pause');
+            playIcon.classList.add('fa-play');
+            albumCover.classList.remove('playing');
+            defaultCover.classList.remove('playing');
+            isPlaying = false;
+        }
+
+        // Остановка воспроизведения
+        function stopPlayback() {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            playIcon.classList.remove('fa-pause');
+            playIcon.classList.add('fa-play');
+            albumCover.classList.remove('playing');
+            defaultCover.classList.remove('playing');
+            isPlaying = false;
+            progress.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
+        }
+
+        // Обновление прогресса воспроизведения
+        function updateProgress() {
+            const currentTime = audioPlayer.currentTime;
+            const duration = audioPlayer.duration;
+            
+            if (isNaN(duration)) return;
+            
+            const progressPercent = (currentTime / duration) * 100;
+            progress.style.width = `${progressPercent}%`;
+            
+            currentTimeEl.textContent = formatTime(currentTime);
+            
+            // Если трек закончился
+            if (currentTime >= duration) {
+                handleTrackEnd();
+            }
+        }
+
+        // Следующий трек
+        function playNext() {
+            if (!isConnected || userPlaylist.length === 0) return;
+            
+            if (isShuffled) {
+                currentTrackIndex = Math.floor(Math.random() * userPlaylist.length);
+            } else {
+                currentTrackIndex = (currentTrackIndex + 1) % userPlaylist.length;
+            }
+            
+            updateTrackInfo();
+            if (isPlaying) {
+                stopPlayback();
+                playCurrentTrack();
+            }
+        }
+
+        // Предыдущий трек
+        function playPrev() {
+            if (!isConnected || userPlaylist.length === 0) return;
+            
+            currentTrackIndex = (currentTrackIndex - 1 + userPlaylist.length) % userPlaylist.length;
+            updateTrackInfo();
+            if (isPlaying) {
+                stopPlayback();
+                playCurrentTrack();
+            }
+        }
+
+        // Обработчик завершения трека
+        function handleTrackEnd() {
+            if (isRepeated) {
+                // Начинаем трек заново
+                audioPlayer.currentTime = 0;
+                audioPlayer.play();
+            } else {
+                playNext();
+            }
+        }
+
+        // Переключение режима повтора
+        function toggleRepeat() {
+            isRepeated = !isRepeated;
+            repeatBtn.style.color = isRepeated ? '#1db954' : '#b3b3b3';
+            audioPlayer.loop = isRepeated;
+        }
+
+        // Переключение режима перемешивания
+        function toggleShuffle() {
+            isShuffled = !isShuffled;
+            shuffleBtn.style.color = isShuffled ? '#1db954' : '#b3b3b3';
+        }
+
+        // Обработчик клика по прогресс-бару
+        function setProgress(e) {
+            if (!isConnected || userPlaylist.length === 0) return;
+            
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const percent = (clickX / width);
+            
+            if (audioPlayer.duration) {
+                audioPlayer.currentTime = percent * audioPlayer.duration;
+            }
+        }
+
+        // Обработчик изменения громкости
+        function setVolume(e) {
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const percent = (clickX / width);
+            volumeLevel.style.width = `${percent * 100}%`;
+            
+            audioPlayer.volume = percent;
+        }
+
+        // Выбор трека из плейлиста
+        function selectTrack(e) {
+            if (!isConnected) return;
+            
+            const item = e.currentTarget;
+            const index = parseInt(item.getAttribute('data-index'));
+            
+            if (index !== currentTrackIndex) {
+                currentTrackIndex = index;
+                updateTrackInfo();
+                
+                if (isPlaying) {
+                    stopPlayback();
+                    playCurrentTrack();
+                }
+            }
+        }
+
+        // Обновление плейлиста
+        function refreshPlaylist() {
+            if (!isConnected) {
+                showNotification("Сначала подключитесь к Spotify");
+                return;
+            }
+            
+            showNotification("Обновление плейлиста...");
+            
+            // Имитируем задержку обновления
+            setTimeout(() => {
+                // В реальном приложении здесь был бы запрос к Spotify API
+                // Для демо просто перемешиваем плейлист
+                if (userPlaylist.length > 0) {
+                    userPlaylist = [...userPlaylist].sort(() => Math.random() - 0.5);
+                    updatePlaylistUI();
+                    showNotification("Плейлист обновлен!");
+                }
+            }, 1000);
+        }
+
+        // Показать уведомление
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Назначение обработчиков событий
+        spotifyConnectBtn.addEventListener('click', connectToSpotify);
+        realLoginBtn.addEventListener('click', realSpotifyLogin);
+        demoLoginBtn.addEventListener('click', demoLogin);
+        playPauseBtn.addEventListener('click', togglePlay);
+        nextBtn.addEventListener('click', playNext);
+        prevBtn.addEventListener('click', playPrev);
+        repeatBtn.addEventListener('click', toggleRepeat);
+        shuffleBtn.addEventListener('click', toggleShuffle);
+        progressBar.addEventListener('click', setProgress);
+        volumeBar.addEventListener('click', setVolume);
+        refreshPlaylistBtn.addEventListener('click', refreshPlaylist);
+
+        // Закрытие модального окна при клике вне его
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.classList.remove('active');
+            }
+        });
+
+        // Настройка громкости по умолчанию
+        audioPlayer.volume = 0.7;
+        volumeLevel.style.width = '70%';
+
+        // Инициализация
+        updateTrackInfo();
+    </script>
+</body>
+</html>
